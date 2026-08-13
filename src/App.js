@@ -1,4 +1,4 @@
-import "./App.css";
+import "./App.CSS";
 import Dictionary from "./Dictionary";
 
 export default function App() {
