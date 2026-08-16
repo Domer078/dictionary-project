@@ -1,53 +1,53 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import Results from "./Results";
-import "./Dictionary.CSS";
+// import React, { useState, useEffect } from "react";
+// import axios from "axios";
+// import Results from "./Results";
+// import "./Dictionary.CSS";
 
-export default function Dictionary(props) {
-  const [keyword, setKeyword] = useState(props.defaultKeyword);
-  const [results, setResults] = useState(null);
+// export default function Dictionary(props) {
+//   const [keyword, setKeyword] = useState(props.defaultKeyword);
+//   const [results, setResults] = useState(null);
 
-  function handleResponse(response) {
-    setResults(response.data[0]);
-  }
+//   function handleResponse(response) {
+//     setResults(response.data[0]);
+//   }
 
-  function search() {
-    let apiUrl = `https://api.dictionaryapi.dev/api/v2/entries/en_US/${keyword}`;
+//   function search() {
+//     let apiUrl = `https://api.dictionaryapi.dev/api/v2/entries/en_US/${keyword}`;
 
-    axios.get(apiUrl).then(handleResponse);
-  }
+//     axios.get(apiUrl).then(handleResponse);
+//   }
 
-  function handleSubmit(event) {
-    event.preventDefault();
-    search();
-  }
+//   function handleSubmit(event) {
+//     event.preventDefault();
+//     search();
+//   }
 
-  function handleKeywordChange(event) {
-    setKeyword(event.target.value);
-  }
+//   function handleKeywordChange(event) {
+//     setKeyword(event.target.value);
+//   }
 
-  useEffect(() => {
-    search();
-  }, []);
+//   useEffect(() => {
+//     search();
+//   }, []);
 
-  return (
-    <div className="Dictionary">
-      <section>
-        <h1>What word do you want to look up?</h1>
+//   return (
+//     <div className="Dictionary">
+//       <section>
+//         <h1>What word do you want to look up?</h1>
 
-        <form onSubmit={handleSubmit}>
-          <input type="search" value={keyword} onChange={handleKeywordChange} />
-        </form>
+//         <form onSubmit={handleSubmit}>
+//           <input type="search" value={keyword} onChange={handleKeywordChange} />
+//         </form>
 
-        <div className="hint">
-          suggested words: sunset, wine, yoga, plant...
-        </div>
-      </section>
+//         <div className="hint">
+//           suggested words: sunset, wine, yoga, plant...
+//         </div>
+//       </section>
 
-      <Results results={results} />
-    </div>
-  );
-}
+//       <Results results={results} />
+//     </div>
+//   );
+// }
 
 // export default function Dictionary(props) {
 //   let [keyword, setKeyword] = useState(props.defaultKeyword);
@@ -102,3 +102,60 @@ export default function Dictionary(props) {
 //     return "Loading";
 //   }
 // }
+
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Results from "./Results";
+import "./Dictionary.CSS";
+
+export default function Dictionary(props) {
+  const [keyword, setKeyword] = useState(props.defaultKeyword);
+  const [results, setResults] = useState(null);
+
+  function handleResponse(response) {
+    setResults(response.data[0]);
+  }
+
+  useEffect(
+    function () {
+      let apiUrl = `https://api.dictionaryapi.dev/api/v2/entries/en_US/${keyword}`;
+
+      axios.get(apiUrl).then(handleResponse);
+    },
+    [keyword],
+  );
+
+  function handleSubmit(event) {
+    event.preventDefault();
+
+    let apiUrl = `https://api.dictionaryapi.dev/api/v2/entries/en_US/${keyword}`;
+
+    axios.get(apiUrl).then(handleResponse);
+  }
+
+  function handleKeywordChange(event) {
+    setKeyword(event.target.value);
+  }
+
+  return (
+    <div className="Dictionary">
+      <section>
+        <h1>What word do you want to look up?</h1>
+
+        <form onSubmit={handleSubmit}>
+          <input
+            type="search"
+            onChange={handleKeywordChange}
+            defaultValue={props.defaultKeyword}
+          />
+        </form>
+
+        <div className="hint">
+          suggested words: sunset, wine, yoga, plant...
+        </div>
+      </section>
+
+      <Results results={results} />
+    </div>
+  );
+}
