@@ -1,20 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Results from "./Results";
 import "./Dictionary.CSS";
 
 export default function Dictionary(props) {
-  let [keyword, setKeyword] = useState(props.defaultKeyword);
-  let [results, setResults] = useState(null);
-  let [loaded, setLoaded] = useState(false);
+  const [keyword, setKeyword] = useState(props.defaultKeyword);
+  const [results, setResults] = useState(null);
 
   function handleResponse(response) {
     setResults(response.data[0]);
   }
 
   function search() {
-    // documentation: https://dictionaryapi.dev/e
     let apiUrl = `https://api.dictionaryapi.dev/api/v2/entries/en_US/${keyword}`;
+
     axios.get(apiUrl).then(handleResponse);
   }
 
@@ -27,47 +26,41 @@ export default function Dictionary(props) {
     setKeyword(event.target.value);
   }
 
-  function load() {
-    setLoaded(true);
+  useEffect(() => {
     search();
-  }
+  }, []);
 
-  if (loaded) {
-    return (
-      <div className="Dictionary">
-        <section>
-          <h1>What word do you want to look up?</h1>
-          <form onSubmit={handleSubmit}>
-            <input
-              type="search"
-              onChange={handleKeywordChange}
-              defaultValue={props.defaultKeyword}
-            />
-          </form>
-          <div className="hint">
-            suggested words: sunset, wine, yoga, plant...
-          </div>
-        </section>
-        <Results results={results} />
-      </div>
-    );
-  } else {
-    load();
-    return "Loading";
-  }
+  return (
+    <div className="Dictionary">
+      <section>
+        <h1>What word do you want to look up?</h1>
+
+        <form onSubmit={handleSubmit}>
+          <input type="search" value={keyword} onChange={handleKeywordChange} />
+        </form>
+
+        <div className="hint">
+          suggested words: sunset, wine, yoga, plant...
+        </div>
+      </section>
+
+      <Results results={results} />
+    </div>
+  );
 }
 
 // export default function Dictionary(props) {
-//   const [keyword, setKeyword] = useState(props.defaultKeyword);
-//   const [results, setResults] = useState(null);
+//   let [keyword, setKeyword] = useState(props.defaultKeyword);
+//   let [results, setResults] = useState(null);
+//   let [loaded, setLoaded] = useState(false);
 
 //   function handleResponse(response) {
 //     setResults(response.data[0]);
 //   }
 
 //   function search() {
+//     // documentation: https://dictionaryapi.dev/e
 //     let apiUrl = `https://api.dictionaryapi.dev/api/v2/entries/en_US/${keyword}`;
-
 //     axios.get(apiUrl).then(handleResponse);
 //   }
 
@@ -80,25 +73,32 @@ export default function Dictionary(props) {
 //     setKeyword(event.target.value);
 //   }
 
-//   useEffect(() => {
+//   function load() {
+//     setLoaded(true);
 //     search();
-//   }, []);
+//   }
 
-//   return (
-//     <div className="Dictionary">
-//       <section>
-//         <h1>What word do you want to look up?</h1>
-
-//         <form onSubmit={handleSubmit}>
-//           <input type="search" value={keyword} onChange={handleKeywordChange} />
-//         </form>
-
-//         <div className="hint">
-//           suggested words: sunset, wine, yoga, plant...
-//         </div>
-//       </section>
-
-//       <Results results={results} />
-//     </div>
-//   );
+//   if (loaded) {
+//     return (
+//       <div className="Dictionary">
+//         <section>
+//           <h1>What word do you want to look up?</h1>
+//           <form onSubmit={handleSubmit}>
+//             <input
+//               type="search"
+//               onChange={handleKeywordChange}
+//               defaultValue={props.defaultKeyword}
+//             />
+//           </form>
+//           <div className="hint">
+//             suggested words: sunset, wine, yoga, plant...
+//           </div>
+//         </section>
+//         <Results results={results} />
+//       </div>
+//     );
+//   } else {
+//     load();
+//     return "Loading";
+//   }
 // }
