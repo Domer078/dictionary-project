@@ -20,13 +20,15 @@ export default function Dictionary(props) {
 
   function search() {
     // documentation: https://dictionaryapi.dev/e
-    let apiUrl = `https://corsproxy.io/?https://api.dictionaryapi.dev/api/v2/entries/en_US/${keyword}`;
+    let apiUrl = `https://api.allorigins.win/raw?url=https://api.dictionaryapi.dev/api/v2/entries/en_US/${keyword}`;
     axios
       .get(apiUrl)
       .then(handleDictionResponse)
       .catch(function (error) {
         console.log("Dictionary API Error:", error);
-        alert("Sorry, we could'nt find that word.Try to find another one");
+        if (error.response && error.response.status === 404) {
+          alert("Sorry, we could'nt find that word. Try another one :)");
+        }
       });
 
     // documentation: https://www.pexels.com/api/key/
