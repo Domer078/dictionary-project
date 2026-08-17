@@ -20,28 +20,15 @@ export default function Dictionary(props) {
 
   function search() {
     // documentation: https://dictionaryapi.dev/e
-    let apiUrl = `https://api.allorigins.win/raw?url=https://api.dictionaryapi.dev/api/v2/entries/en_US/${keyword}`;
-    axios
-      .get(apiUrl)
-      .then(handleDictionResponse)
-      .catch(function (error) {
-        console.log("Dictionary API Error:", error);
-        if (error.response && error.response.status === 404) {
-          alert("Sorry, we could'nt find that word. Try another one :)");
-        }
-      });
+    let apiUrl = `https://api.dictionaryapi.dev/api/v2/entries/en_US/${keyword}`;
+    axios.get(apiUrl).then(handleDictionResponse);
 
     // documentation: https://www.pexels.com/api/key/
     let pexelsApiKey =
       "BWlF6Y9UWo0poE1t8PRkHgo46BhWsgs6gfhFfJFdlub6Dg1CAyGbkyEa";
     let pexelsApiUrl = `https://api.pexels.com/v1/search?query=${keyword}&per_page=9`;
     let headers = { Authorization: `${pexelsApiKey}` };
-    axios
-      .get(pexelsApiUrl, { headers: headers })
-      .then(handlePexelsResponse)
-      .catch(function (error) {
-        console.log("Pexels API Error:", error);
-      });
+    axios.get(pexelsApiUrl, { headers: headers }).then(handlePexelsResponse);
   }
 
   function handleSubmit(event) {
